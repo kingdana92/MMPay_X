@@ -230,14 +230,16 @@
             const dateOptions = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
             document.getElementById('receipt-date').innerText = new Date().toLocaleDateString('en-US', dateOptions);
 
-            // Map the exact payload keys to the UI
-            document.getElementById('receipt-amount').innerText = payload.amount ? parseInt(payload.amount).toLocaleString() : '0'; 
-            document.getElementById('receipt-currency').innerText = payload.currency || 'MMK';
-            document.getElementById('receipt-order-id').innerText = payload.orderId || '-';
-            document.getElementById('receipt-vendor').innerText = payload.vendor || '-';
-            document.getElementById('receipt-method').innerText = payload.method || '-';
-            document.getElementById('receipt-ref').innerText = payload.transactionRefId || '-';
-            document.getElementById('receipt-status').innerText = payload.status || 'SUCCESS';
+            // Map the payload to the UI. Added 'N/A' fallbacks so you can see exactly what data is missing.
+            document.getElementById('receipt-amount').innerText = payload.amount ? parseInt(payload.amount).toLocaleString() : 'N/A'; 
+            document.getElementById('receipt-currency').innerText = payload.currency || 'N/A';
+            document.getElementById('receipt-order-id').innerText = payload.orderId || 'N/A';
+            document.getElementById('receipt-vendor').innerText = payload.vendor || 'N/A';
+            document.getElementById('receipt-method').innerText = payload.method || 'N/A';
+            document.getElementById('receipt-ref').innerText = payload.transactionRefId || 'N/A';
+            
+            // Force status to show whatever the SDK returned, so we can debug it
+            document.getElementById('receipt-status').innerText = payload.status || 'NO STATUS FIELD';
 
             // Show modal
             document.getElementById('receipt-modal').classList.add('active');
@@ -247,7 +249,7 @@
             document.getElementById('receipt-modal').classList.remove('active');
             const btn = document.getElementById('place-order-button');
             btn.innerText = "Pay Securely";
-            btn.style.backgroundColor = ""; 
+            btn.disabled = false;
         });
 
         // --- 2. PAYMENT GATEWAY LOGIC ---
@@ -276,37 +278,29 @@
                     orderId: 'APK-' + new Date().getTime(),
                     callbackUrl: window.location.origin + '/webhook'
                 }, (result) => {
-                    btn.disabled = false;
                     
-                    // 1. Log to browser console to see exactly what the frontend receives
-                    console.log("Frontend SDK Callback Result:", result);
+                    // 1. Log the exact output to the browser console for debugging
+                    console.log("🚨 RAW SDK RESULT:", result);
 
-                    // 2. Safely extract the payload data
-                    let payloadData = result;
-                    
-                    // If the SDK returns a stringified JSON, parse it
+                    // 2. Flatten the data. If it's a string, parse it.
+                    let data = result;
                     if (typeof result === 'string') {
-                        try { payloadData = JSON.parse(result); } catch(e) { console.error("Parse error", e); }
-                    } 
-                    // If the SDK wraps the data in a parent object
-                    else if (result && result.data) {
-                        payloadData = result.data;
-                    } else if (result && result.payload) {
-                        payloadData = result.payload;
+                        try { data = JSON.parse(result); } catch(e) {}
                     }
+                    
+                    // Extract the payload regardless of how the SDK wraps it
+                    const finalPayload = data.payload || data.data || data;
 
-                    // 3. Trigger the UI based on the exact payload you provided
-                    if (payloadData && payloadData.status === 'SUCCESS') {
-                        btn.innerText = "Payment Success!";
-                        btn.style.backgroundColor = "#10B981"; 
-                        showReceipt(payloadData);
-                    } else {
-                        btn.innerText = originalText;
-                        alert("Payment failed or cancelled.");
-                    }
+                    // 3. FORCE SHOW THE RECEIPT
+                    // We completely removed the strict if/else check. It will always open the popup now.
+                    btn.innerText = "Payment Finished";
+                    btn.style.backgroundColor = "#10B981"; 
+                    showReceipt(finalPayload);
+                    
                 });
             } catch (error) {
-                alert("Error initializing payment. Check API Key.");
+                console.error(error);
+                alert("Error initializing payment.");
                 btn.disabled = false;
                 btn.innerText = originalText;
             }
