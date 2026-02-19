@@ -230,7 +230,7 @@
             const dateOptions = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
             document.getElementById('receipt-date').innerText = new Date().toLocaleDateString('en-US', dateOptions);
 
-            // Populate the UI with payload data
+            // Map the exact payload keys to the UI
             document.getElementById('receipt-amount').innerText = payload.amount ? parseInt(payload.amount).toLocaleString() : '0'; 
             document.getElementById('receipt-currency').innerText = payload.currency || 'MMK';
             document.getElementById('receipt-order-id').innerText = payload.orderId || '-';
@@ -245,7 +245,6 @@
 
         document.getElementById('close-modal-btn').addEventListener('click', () => {
             document.getElementById('receipt-modal').classList.remove('active');
-            // Optional: Reset button state
             const btn = document.getElementById('place-order-button');
             btn.innerText = "Pay Securely";
             btn.style.backgroundColor = ""; 
@@ -275,15 +274,29 @@
                 MMPayApp.showPaymentModal({
                     amount: amountValue,
                     orderId: 'APK-' + new Date().getTime(),
-                    callbackUrl: window.location.origin + '/webhook' // Automatically points to your Railway domain's /webhook
+                    callbackUrl: window.location.origin + '/webhook'
                 }, (result) => {
                     btn.disabled = false;
                     
-                    // MMPay returns status or success bool. Extract the payload appropriately.
-                    const isSuccess = result.success || result.status === 'SUCCESS';
-                    const payloadData = result.payload || result.data || result;
+                    // 1. Log to browser console to see exactly what the frontend receives
+                    console.log("Frontend SDK Callback Result:", result);
 
-                    if (isSuccess) {
+                    // 2. Safely extract the payload data
+                    let payloadData = result;
+                    
+                    // If the SDK returns a stringified JSON, parse it
+                    if (typeof result === 'string') {
+                        try { payloadData = JSON.parse(result); } catch(e) { console.error("Parse error", e); }
+                    } 
+                    // If the SDK wraps the data in a parent object
+                    else if (result && result.data) {
+                        payloadData = result.data;
+                    } else if (result && result.payload) {
+                        payloadData = result.payload;
+                    }
+
+                    // 3. Trigger the UI based on the exact payload you provided
+                    if (payloadData && payloadData.status === 'SUCCESS') {
                         btn.innerText = "Payment Success!";
                         btn.style.backgroundColor = "#10B981"; 
                         showReceipt(payloadData);
