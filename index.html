@@ -11,8 +11,6 @@
     <style>
         :root {
             --primary-color: #0d9488; 
-            --accent-color: #f59e0b; 
-            --primary-hover: #0f766e;
             --text-main: #111827;
             --text-sub: #6b7280;
             --border-color: #e2e8f0;
@@ -27,10 +25,7 @@
             align-items: center; 
             justify-content: center; 
             background: #064e3b; 
-            background-image: 
-                radial-gradient(at 0% 0%, hsla(160,84%,12%,1) 0, transparent 50%), 
-                radial-gradient(at 50% 0%, hsla(45,93%,47%,0.2) 0, transparent 50%), 
-                radial-gradient(at 100% 0%, hsla(175,84%,12%,1) 0, transparent 50%);
+            background-image: radial-gradient(at 0% 0%, hsla(160,84%,12%,1) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(175,84%,12%,1) 0, transparent 50%);
             padding: 20px;
         }
 
@@ -43,7 +38,6 @@
             border-radius: 28px; 
             box-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.6); 
             text-align: center;
-            border: 1px solid rgba(255,255,255,0.2);
         }
 
         .brand-pill {
@@ -74,93 +68,23 @@
 
         h1 { font-size: 1.5rem; color: var(--text-main); margin-bottom: 20px; font-weight: 800; }
 
-        /* New API Key Field Styles */
-        .input-group {
-            text-align: left;
-            margin-bottom: 15px;
-        }
+        /* Inputs */
+        .input-group { text-align: left; margin-bottom: 15px; }
+        .input-group label { display: block; font-size: 12px; font-weight: 600; color: var(--text-sub); margin-bottom: 6px; }
+        .input-field { width: 100%; padding: 14px; border-radius: 12px; border: 2px solid var(--border-color); outline: none; transition: 0.3s; }
+        .input-field:focus { border-color: var(--primary-color); }
 
-        .input-group label {
-            display: block;
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--text-sub);
-            margin-bottom: 6px;
-            margin-left: 4px;
-        }
+        /* Amount Box */
+        .amount-wrapper { display: flex; align-items: center; justify-content: center; margin-bottom: 25px; background: #f8fafc; padding: 15px; border-radius: 16px; border: 2px solid var(--border-color); }
+        #amount-input { font-size: 2rem; font-weight: 700; color: var(--text-main); width: 140px; border: none; background: transparent; text-align: right; outline: none; }
+        .currency-suffix { font-size: 1rem; font-weight: 700; color: var(--primary-color); margin-left: 8px; }
 
-        .input-field {
-            width: 100%;
-            padding: 14px;
-            border-radius: 12px;
-            border: 2px solid var(--border-color);
-            font-family: 'Inter', sans-serif;
-            font-size: 14px;
-            transition: all 0.3s ease;
-            outline: none;
-        }
+        /* Button */
+        .btn { width: 100%; padding: 18px; background-color: var(--text-main); color: white; border: none; cursor: pointer; font-size: 16px; font-weight: 700; border-radius: 14px; transition: 0.3s; }
+        .btn:hover { background-color: #000; transform: translateY(-2px); }
+        .btn:disabled { background-color: #cbd5e1; cursor: not-allowed; transform: none; }
 
-        .input-field:focus {
-            border-color: var(--primary-color);
-            background: #fff;
-        }
-
-        .amount-wrapper {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-top: 10px;
-            margin-bottom: 25px;
-            background: #f8fafc;
-            padding: 15px;
-            border-radius: 16px;
-            border: 2px solid var(--border-color);
-        }
-
-        #amount-input {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--text-main);
-            width: 140px;
-            border: none;
-            background: transparent;
-            text-align: right;
-            outline: none;
-        }
-
-        .currency-suffix {
-            font-size: 1rem;
-            font-weight: 700;
-            color: var(--primary-color);
-            margin-left: 8px;
-        }
-
-        .btn { 
-            width: 100%; 
-            padding: 18px; 
-            background-color: var(--text-main); 
-            color: white; 
-            border: none; 
-            cursor: pointer; 
-            font-size: 16px; 
-            font-weight: 700; 
-            border-radius: 14px; 
-            transition: all 0.3s ease; 
-        }
-        
-        .btn:hover { background-color: #000; transform: translateY(-1px); }
-        .btn:disabled { background-color: #cbd5e1; cursor: not-allowed; }
-
-        .footer {
-            margin-top: 20px;
-            font-size: 11px;
-            color: #94a3b8;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-        }
-        
+        .footer { margin-top: 20px; font-size: 11px; color: #94a3b8; display: flex; align-items: center; justify-content: center; gap: 6px; }
         .lock-icon { width: 14px; height: 14px; fill: #10b981; }
     </style>
 </head>
@@ -168,7 +92,6 @@
 
     <div class="checkout-card">
         <div class="brand-pill">AyeParKwar Exclusive</div>
-
         <div class="icon-wrapper">
             <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
         </div>
@@ -177,7 +100,7 @@
         
         <div class="input-group">
             <label for="api-key-input">MERCHANT PUBLIC KEY</label>
-            <input type="text" id="api-key-input" class="input-field" placeholder="Enter pk_live_..." value="pk_live_22c1645968c35c585d6fd56c5aad70eb4fb09b6bb97e33200d2f3932ff453989">
+            <input type="text" id="api-key-input" class="input-field" placeholder="pk_live_..." value="pk_live_22c1645968c35c585d6fd56c5aad70eb4fb09b6bb97e33200d2f3932ff453989">
         </div>
 
         <div class="input-group">
@@ -198,62 +121,44 @@
 
     <script>
         document.getElementById('place-order-button').addEventListener('click', () => {
-            
-            // 1. Get Values from inputs
             const apiKey = document.getElementById('api-key-input').value.trim();
             const amountInput = document.getElementById('amount-input');
             const amountValue = parseInt(amountInput.value);
 
-            // 2. Simple Validation
-            if (!apiKey) {
-                alert("Please enter a valid API Public Key.");
-                return;
-            }
-
-            if (!amountValue || amountValue <= 0) {
-                amountInput.focus();
-                alert("Please enter a valid amount.");
-                return;
-            }
+            if (!apiKey) { alert("Please enter API Key."); return; }
+            if (!amountValue || amountValue <= 0) { alert("Invalid Amount."); return; }
 
             const btn = document.getElementById('place-order-button');
             const originalText = btn.innerText;
-            
             btn.innerText = "Processing...";
             btn.disabled = true;
 
             try {
-                // 3. Initialize SDK using the dynamic API Key from the input field
                 const MMPayApp = new MMPaySDK(apiKey, {
                     baseUrl: 'https://ezapi.myanmyanpay.com', 
                     environment: 'pay',
                     merchantName: 'AyeParKwar', 
                 });
 
-                // 4. Open Modal
                 MMPayApp.showPaymentModal({
                     amount: amountValue,
                     orderId: 'APK-' + new Date().getTime(),
+                    // CHANGE THIS URL AFTER DEPLOYING PART 2 TO RAILWAY
                     callbackUrl: 'https://ayeparkwar.com/webhook' 
                 }, (result) => {
-                    
                     btn.innerText = originalText;
                     btn.disabled = false;
-
                     if (result.success) {
                         btn.innerText = "Success!";
                         btn.style.backgroundColor = "#10B981"; 
-                        setTimeout(() => {
-                            window.location.href = 'https://ayeparkwar.com/success';
-                        }, 1500);
                     } else {
-                        alert("Payment failed or was cancelled.");
+                        alert("Payment cancelled.");
                     }
                 });
             } catch (error) {
-                alert("Initialization Error: Check if your API key is correct.");
-                btn.innerText = originalText;
+                alert("Error initializing payment. Check API Key.");
                 btn.disabled = false;
+                btn.innerText = originalText;
             }
         });
     </script>
