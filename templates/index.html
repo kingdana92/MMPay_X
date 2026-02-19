@@ -6,82 +6,9 @@
     <title>AyeParKwar | Secure Checkout</title>
     
     <script src="https://cdn.jsdelivr.net/npm/mmpay-browser-sdk@latest/dist/mmpay-sdk.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
-        /* Modal Overlay (Hidden by default) */
-.modal-overlay {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(6, 78, 59, 0.8);
-    backdrop-filter: blur(8px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s ease;
-    z-index: 1000;
-}
-
-.modal-overlay.active {
-    opacity: 1;
-    pointer-events: auto;
-}
-
-/* Modal Box */
-.modal-content {
-    background: #ffffff;
-    width: 100%;
-    max-width: 380px;
-    border-radius: 24px;
-    padding: 30px;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-    transform: translateY(20px) scale(0.95);
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.modal-overlay.active .modal-content {
-    transform: translateY(0) scale(1);
-}
-
-/* Header & Icon */
-.modal-header { text-align: center; margin-bottom: 20px; }
-.success-icon {
-    width: 60px; height: 60px;
-    background: #10b981; /* Emerald green */
-    color: white;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    margin: 0 auto 15px;
-    box-shadow: 0 10px 20px -5px rgba(16, 185, 129, 0.4);
-}
-.success-icon svg { width: 30px; height: 30px; }
-.modal-header h2 { font-size: 1.4rem; color: var(--text-main); font-weight: 800; margin-bottom: 5px; }
-.receipt-date { font-size: 0.85rem; color: var(--text-sub); }
-
-/* Receipt Body */
-.receipt-body { background: #f8fafc; border-radius: 16px; padding: 20px; margin-bottom: 20px; border: 1px solid var(--border-color); }
-.amount-display { text-align: center; margin-bottom: 15px; }
-#receipt-amount { font-size: 2.5rem; font-weight: 800; color: var(--text-main); letter-spacing: -1px; }
-.receipt-currency { font-size: 1.2rem; font-weight: 700; color: var(--primary-color); }
-
-.divider { height: 1px; background: border-color; border-bottom: 1px dashed #cbd5e1; margin: 15px 0; }
-
-.receipt-row { display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 12px; }
-.receipt-row:last-child { margin-bottom: 0; }
-.receipt-row span { color: var(--text-sub); font-weight: 500; }
-.receipt-row strong { color: var(--text-main); font-weight: 600; text-align: right; word-break: break-all; max-width: 60%; }
-.status-success { color: #10b981 !important; text-transform: uppercase; font-weight: 800 !important; letter-spacing: 0.5px; }
-
-/* Outline Button */
-.btn-outline {
-    background: transparent;
-    color: var(--text-main);
-    border: 2px solid var(--border-color);
-}
-.btn-outline:hover { background: #f1f5f9; color: black; border-color: #cbd5e1; transform: none; box-shadow: none; }
-
         :root {
             --primary-color: #0d9488; 
             --text-main: #111827;
@@ -102,6 +29,7 @@
             padding: 20px;
         }
 
+        /* --- MAIN CHECKOUT CARD --- */
         .checkout-card { 
             width: 100%;
             max-width: 420px; 
@@ -144,7 +72,7 @@
         /* Inputs */
         .input-group { text-align: left; margin-bottom: 15px; }
         .input-group label { display: block; font-size: 12px; font-weight: 600; color: var(--text-sub); margin-bottom: 6px; }
-        .input-field { width: 100%; padding: 14px; border-radius: 12px; border: 2px solid var(--border-color); outline: none; transition: 0.3s; }
+        .input-field { width: 100%; padding: 14px; border-radius: 12px; border: 2px solid var(--border-color); outline: none; transition: 0.3s; font-family: 'Inter', sans-serif;}
         .input-field:focus { border-color: var(--primary-color); }
 
         /* Amount Box */
@@ -159,51 +87,68 @@
 
         .footer { margin-top: 20px; font-size: 11px; color: #94a3b8; display: flex; align-items: center; justify-content: center; gap: 6px; }
         .lock-icon { width: 14px; height: 14px; fill: #10b981; }
+
+        /* --- RECEIPT MODAL CSS --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(6, 78, 59, 0.8);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+        }
+
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
+
+        .modal-content {
+            background: #ffffff;
+            width: 100%;
+            max-width: 380px;
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            transform: translateY(20px) scale(0.95);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .modal-overlay.active .modal-content { transform: translateY(0) scale(1); }
+
+        .modal-header { text-align: center; margin-bottom: 20px; }
+        .success-icon {
+            width: 60px; height: 60px;
+            background: #10b981;
+            color: white;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 15px;
+            box-shadow: 0 10px 20px -5px rgba(16, 185, 129, 0.4);
+        }
+        .success-icon svg { width: 30px; height: 30px; }
+        .modal-header h2 { font-size: 1.4rem; color: var(--text-main); font-weight: 800; margin-bottom: 5px; }
+        .receipt-date { font-size: 0.85rem; color: var(--text-sub); }
+
+        .receipt-body { background: #f8fafc; border-radius: 16px; padding: 20px; margin-bottom: 20px; border: 1px solid var(--border-color); }
+        .amount-display { text-align: center; margin-bottom: 15px; }
+        #receipt-amount { font-size: 2.5rem; font-weight: 800; color: var(--text-main); letter-spacing: -1px; }
+        .receipt-currency { font-size: 1.2rem; font-weight: 700; color: var(--primary-color); }
+
+        .divider { height: 1px; border-bottom: 1px dashed #cbd5e1; margin: 15px 0; }
+
+        .receipt-row { display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 12px; }
+        .receipt-row:last-child { margin-bottom: 0; }
+        .receipt-row span { color: var(--text-sub); font-weight: 500; }
+        .receipt-row strong { color: var(--text-main); font-weight: 600; text-align: right; word-break: break-all; max-width: 60%; }
+        .status-success { color: #10b981 !important; text-transform: uppercase; font-weight: 800 !important; letter-spacing: 0.5px; }
+
+        .btn-outline { background: transparent; color: var(--text-main); border: 2px solid var(--border-color); margin-top: 10px; }
+        .btn-outline:hover { background: #f1f5f9; color: black; border-color: #cbd5e1; transform: none; box-shadow: none; }
     </style>
 </head>
-<div id="receipt-modal" class="modal-overlay">
-    <div class="modal-content">
-        <div class="modal-header">
-            <div class="success-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-            </div>
-            <h2>Payment Successful</h2>
-            <p id="receipt-date" class="receipt-date"></p>
-        </div>
-        
-        <div class="receipt-body">
-            <div class="amount-display">
-                <span id="receipt-amount">0</span>
-                <span id="receipt-currency" class="receipt-currency">MMK</span>
-            </div>
-            
-            <div class="divider"></div>
-            
-            <div class="receipt-row">
-                <span>Order ID</span>
-                <strong id="receipt-order-id">-</strong>
-            </div>
-            <div class="receipt-row">
-                <span>Vendor</span>
-                <strong id="receipt-vendor">-</strong>
-            </div>
-            <div class="receipt-row">
-                <span>Payment Method</span>
-                <strong id="receipt-method">-</strong>
-            </div>
-            <div class="receipt-row">
-                <span>Transaction Ref</span>
-                <strong id="receipt-ref">-</strong>
-            </div>
-            <div class="receipt-row">
-                <span>Status</span>
-                <strong id="receipt-status" class="status-success">-</strong>
-            </div>
-        </div>
-        
-        <button id="close-modal-btn" class="btn btn-outline">Close Receipt</button>
-    </div>
-</div>
 <body>
 
     <div class="checkout-card">
@@ -222,7 +167,7 @@
         <div class="input-group">
             <label>PAYMENT AMOUNT</label>
             <div class="amount-wrapper">
-                <input type="number" id="amount-input" value="5000" min="100">
+                <input type="number" id="amount-input" value="1000" min="100">
                 <span class="currency-suffix">MMK</span>
             </div>
         </div>
@@ -235,7 +180,78 @@
         </div>
     </div>
 
+    <div id="receipt-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="success-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                </div>
+                <h2>Payment Successful</h2>
+                <p id="receipt-date" class="receipt-date"></p>
+            </div>
+            
+            <div class="receipt-body">
+                <div class="amount-display">
+                    <span id="receipt-amount">0</span>
+                    <span id="receipt-currency" class="receipt-currency">MMK</span>
+                </div>
+                
+                <div class="divider"></div>
+                
+                <div class="receipt-row">
+                    <span>Order ID</span>
+                    <strong id="receipt-order-id">-</strong>
+                </div>
+                <div class="receipt-row">
+                    <span>Vendor</span>
+                    <strong id="receipt-vendor">-</strong>
+                </div>
+                <div class="receipt-row">
+                    <span>Payment Method</span>
+                    <strong id="receipt-method">-</strong>
+                </div>
+                <div class="receipt-row">
+                    <span>Transaction Ref</span>
+                    <strong id="receipt-ref">-</strong>
+                </div>
+                <div class="receipt-row">
+                    <span>Status</span>
+                    <strong id="receipt-status" class="status-success">-</strong>
+                </div>
+            </div>
+            
+            <button id="close-modal-btn" class="btn btn-outline">Close Receipt</button>
+        </div>
+    </div>
+
     <script>
+        // --- 1. RECEIPT MODAL LOGIC ---
+        function showReceipt(payload) {
+            const dateOptions = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+            document.getElementById('receipt-date').innerText = new Date().toLocaleDateString('en-US', dateOptions);
+
+            // Populate the UI with payload data
+            document.getElementById('receipt-amount').innerText = payload.amount ? parseInt(payload.amount).toLocaleString() : '0'; 
+            document.getElementById('receipt-currency').innerText = payload.currency || 'MMK';
+            document.getElementById('receipt-order-id').innerText = payload.orderId || '-';
+            document.getElementById('receipt-vendor').innerText = payload.vendor || '-';
+            document.getElementById('receipt-method').innerText = payload.method || '-';
+            document.getElementById('receipt-ref').innerText = payload.transactionRefId || '-';
+            document.getElementById('receipt-status').innerText = payload.status || 'SUCCESS';
+
+            // Show modal
+            document.getElementById('receipt-modal').classList.add('active');
+        }
+
+        document.getElementById('close-modal-btn').addEventListener('click', () => {
+            document.getElementById('receipt-modal').classList.remove('active');
+            // Optional: Reset button state
+            const btn = document.getElementById('place-order-button');
+            btn.innerText = "Pay Securely";
+            btn.style.backgroundColor = ""; 
+        });
+
+        // --- 2. PAYMENT GATEWAY LOGIC ---
         document.getElementById('place-order-button').addEventListener('click', () => {
             const apiKey = document.getElementById('api-key-input').value.trim();
             const amountInput = document.getElementById('amount-input');
@@ -259,16 +275,21 @@
                 MMPayApp.showPaymentModal({
                     amount: amountValue,
                     orderId: 'APK-' + new Date().getTime(),
-                    // CHANGE THIS URL AFTER DEPLOYING PART 2 TO RAILWAY
-                    callbackUrl: 'https://ayeparkwar.com/webhook' 
+                    callbackUrl: window.location.origin + '/webhook' // Automatically points to your Railway domain's /webhook
                 }, (result) => {
-                    btn.innerText = originalText;
                     btn.disabled = false;
-                    if (result.success) {
-                        btn.innerText = "Success!";
+                    
+                    // MMPay returns status or success bool. Extract the payload appropriately.
+                    const isSuccess = result.success || result.status === 'SUCCESS';
+                    const payloadData = result.payload || result.data || result;
+
+                    if (isSuccess) {
+                        btn.innerText = "Payment Success!";
                         btn.style.backgroundColor = "#10B981"; 
+                        showReceipt(payloadData);
                     } else {
-                        alert("Payment cancelled.");
+                        btn.innerText = originalText;
+                        alert("Payment failed or cancelled.");
                     }
                 });
             } catch (error) {
